@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Scan QR Code</title>
+    <script src="https://unpkg.com/html5-qrcode"></script>
+</head>
+<body>
+    <h1>QR Code Scanner</h1>
+
+    <!-- Manual Input -->
+    <form method="post">
+        <label for="qr_id">Enter QR Code ID:</label>
+        <input type="text" id="qr_id" name="qr_id" required>
+        <button type="submit">Scan</button>
+    </form>
+
+    <!-- Camera Scanner -->
+    <h2>Or Scan with Camera</h2>
+    <div id="reader" style="width: 300px;"></div>
+
+    <p id="scan-count">Scanned: 0/500</p>
+
+    <script>
+        let qrCount = 0;
+        const maxScans = 500;
+
+        function updateScanCount() {
+            document.getElementById('scan-count').textContent = `Scanned: ${qrCount}/${maxScans}`;
+        }
+
+        const qrReader = new Html5Qrcode("reader");
+
+        function onScanSuccess(decodedText) {
+            qrCount++;
+            updateScanCount();
+
+            if (qrCount >= maxScans) {
+                alert("Scan limit reached: 500 QR codes.");
+                qrReader.stop();
+            }
+
+            document.getElementById("qr_id").value = decodedText;
+            document.querySelector("form").submit();
+        }
+
+        qrReader.start(
+            { facingMode: "environment" },
+            { fps: 10, qrbox: 250 },
+            onScanSuccess
+        ).catch(err => console.error("Camera error:", err));
+    </script>
+
+    <a href="/">Generate QR Code</a>
+</body>
+</html>

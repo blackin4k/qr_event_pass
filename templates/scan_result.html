@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Scan Result</title>
+    <script>
+        window.onload = function() {
+            const duplicate = {{ duplicate|tojson }};
+            if (duplicate) {
+                alert("Warning: This QR code has been scanned more than once!");
+            }
+        };
+    </script>
+</head>
+<body>
+    <h1>Scan Result</h1>
+    <p>Scans: {{ qr_info.scan_count }}</p>
+    {% if duplicate %}
+        <p style="color: red;">Warning: This QR code has been scanned more than once!</p>
+    {% endif %}
+    <a href="/scan">Scan Another QR Code</a>
+    <a href="/">Generate QR Code</a>
+</body>
+</html>
